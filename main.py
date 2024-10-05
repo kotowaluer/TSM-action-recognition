@@ -10,9 +10,10 @@ import torch.optim
 from torch.nn.utils import clip_grad_norm_
 import matplotlib.pyplot as plt  # 用于绘制混淆矩阵图像
 
-from ops.TSN_with_hands import TSN_With_Hand_LSTM
-from ops.dataset_hands import TSNDataSet
+# from ops.TSN_with_hands import TSN_With_Hand_LSTM
 from ops.models import TSN
+# from ops.dataset_hands import TSNDataSet
+from ops.dataset import TSNDataSet
 from ops.transforms import *
 from opts import parser
 from ops import dataset_config
@@ -59,7 +60,7 @@ def main():
     if args.modality == 'mono' or args.modality == 'combined':
         args.modality = 'RGB'
 
-    model = TSN_With_Hand_LSTM(num_class, args.num_segments, args.modality,
+    model = TSN(num_class, args.num_segments, args.modality,
                 base_model=args.arch,
                 consensus_type=args.consensus_type,
                 dropout=args.dropout,
@@ -93,7 +94,7 @@ def main():
         if args.temporal_pool:  # early temporal pool so that we can load the state_dict
             make_temporal_pool(model.module.base_model, args.num_segments)
         if os.path.isfile(args.resume):
-            print((f"=> loading checkpoint '{args.resume}'"))
+            print(f"=> loading checkpoint '{args.resume}'")
             checkpoint = torch.load(args.resume)
             args.start_epoch = checkpoint['epoch']
             best_prec1 = checkpoint['best_prec1']
@@ -185,30 +186,6 @@ def main():
         batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
 
-    # define loss function (criterion) and optimizer
-    # 假设你已经有 class_weights 的字典
-    class_weights_dict = {
-        0: 0.3306,
-        1: 0.9526,
-        2: 0.3639,
-        3: 0.7641,
-        4: 3.4070,
-        5: 7.2275,
-        6: 5.2985,
-        7: 0.8966,
-        8: 0.5989,
-        9: 1.0067,
-        10: 1.4683,
-        11: 0.7247,
-        12: 2.0579,
-        13: 1.2239,
-        14: 15.5091,
-        15: 24.6095
-    }
-
-    # 将 class_weights 转换为 tensor，并确保其类型为 float
-    class_weights = torch.tensor(list(class_weights_dict.values()), dtype=torch.float32)
-    class_weights = class_weights.cuda()
     if args.loss_type == 'nll':
         criterion = torch.nn.CrossEntropyLoss().cuda()
     else:
@@ -282,16 +259,15 @@ def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
     model.train()
 
     end = time.time()
-    for i, (input, target, hands) in enumerate(train_loader):
+    for i, (input, target) in enumerate(train_loader):
         # measure data_origin loading time
         data_time.update(time.time() - end)
         target = target.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target).long()
-        hand_var = torch.autograd.Variable(hands)
 
         # compute output
-        output = model(input_var, hand_var)
+        output = model(input_var)
         loss = criterion(output, target_var)
 
         # measure accuracy and record loss
@@ -347,11 +323,10 @@ def validate(val_loader, model, criterion, epoch, log=None, tf_writer=None):
     all_targets = []
     end = time.time()
     with torch.no_grad():
-        for i, (input, target, hands) in enumerate(val_loader):
+        for i, (input, target) in enumerate(val_loader):
             target = target.cuda()
-            hand_var = torch.autograd.Variable(hands)
             # compute output
-            output = model(input, hand_var)
+            output = model(input)
             loss = criterion(output, target)
             val_loss += loss.item()
 

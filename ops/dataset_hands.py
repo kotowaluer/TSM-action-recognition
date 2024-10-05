@@ -49,7 +49,7 @@ class TSNDataSet(data.Dataset):
         self.transform = transform
         self.random_shift = random_shift
         self.test_mode = test_mode
-        self.csv_folder = '/home/jay/PycharmProjects/assembly101-action-recognition/TSM-action-recognition/my_data/hand_csv'
+        self.csv_folder = '/home/jay/PycharmProjects/TSM-action-recognition/my_data/hand_csv'
 
         if self.modality == 'RGBDiff':
             # Diff needs one more image to calculate diff

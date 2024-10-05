@@ -1,6 +1,6 @@
 /checkpoint/
 /data/
-/data_origin/
+/data/data_origin/
 /my_data/
 /pretrained_models/
 *.txt

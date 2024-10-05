@@ -32,7 +32,7 @@ python gen_fine_labels.py arg1 arg2
 
 Please refer to our [annotations repository](https://github.com/assembly-101/assembly101-annotations) for further information regarding Assembly101 annotations.
 
-In the [`data`](data_origin) folder, we already provide TSM-style `.txt` fine-grained action annotations for all 12 views (combined). The files are:
+In the [`data`](data/data_origin) folder, we already provide TSM-style `.txt` fine-grained action annotations for all 12 views (combined). The files are:
 
 | File name | Description |
 |-----------|-------------|
@@ -69,7 +69,7 @@ python test_models.py Assembly101 --weights="path_to_weight" --test_segments 8 -
 The code outputs the evaluation set (validation/test) predictions in the form of two numpy files:
 | File name | Description |
 |-----------|-------------|
-| preds.npy | fine-grained action predictions (numeric labels) per segment following the same order as in the .txt file. The labels follow the action index convention as present in the [data/category.txt](data_origin/category.txt) |
+| preds.npy | fine-grained action predictions (numeric labels) per segment following the same order as in the .txt file. The labels follow the action index convention as present in the [data/category.txt](data/data_origin/category.txt) |
 | scores.npy | fine-grained action prediction scores per segment following the same order as in the .txt. The per-segment scores are 1380-dim vectors corresponding to the 1380 fine-grained action classes. |
 
 **We withhold the ground truth test labels for a our [3D Action Recognition challenge](https://codalab.lisn.upsaclay.fr/competitions/5256) on Codalab. Please submit to the challenge to generate action recognition accuracy on the test set.**

@@ -4,12 +4,12 @@
 import os
 
 def return_Assembly101(modality, evaluation_file):
-    path_to_data = 'my_data' # modify the path to your data
+    path_to_data = 'my_data' # modify the path to your data!!!
     filename_categories = f'{path_to_data}/category.txt'
     
     # path to frames
     # please update root_data with the path where you saved the frames
-    root_data = '/media/jay/hard_disk/data0904/' # modify it
+    root_data = '/media/jay/hard_disk/data0904/' # modify it!!!
 
     if not os.path.exists(root_data):
         print('Please update root_data with the path where you saved the frames.')

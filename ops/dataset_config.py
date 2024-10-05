@@ -4,7 +4,7 @@
 import os
 
 def return_Assembly101(modality, evaluation_file):
-    path_to_data = 'my_data' # modify the path to your data!!!
+    path_to_data = 'my_data' # modify the path to your data where the folder saves the category.txt, train_rgb.txt and validation_rgb.txt
     filename_categories = f'{path_to_data}/category.txt'
     
     # path to frames

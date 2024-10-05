@@ -5,3 +5,10 @@
 /pretrained_models/
 *.txt
 /log/
+/.idea/misc.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/test_video.py
+/.idea/TSM-action-recognition.iml
+/.idea/vcs.xml
+/.idea/workspace.xml
